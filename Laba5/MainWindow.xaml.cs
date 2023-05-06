@@ -1,11 +1,8 @@
-﻿using Microsoft.Win32;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using static Laba5.MainWindow;
 using System.Windows.Forms;
 
 namespace Laba5
@@ -13,27 +10,31 @@ namespace Laba5
 
     public partial class MainWindow : Window
     {
-        private Dictionary<TableScheme, Table> schemesAndTablesDict = new Dictionary<TableScheme, Table>();
-
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void MenuOpenFileClick(object sender, RoutedEventArgs e)
+        private Dictionary<TableScheme, Table> schemesTables = new Dictionary<TableScheme, Table>();
+
+        private void OpenFile(object sender, RoutedEventArgs e)
         {
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog(); //Выдает приглашение пользователю для выбора папки.
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
             string folderPath = "";
             if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                folderPath = folderBrowserDialog.SelectedPath;  
+                folderPath = folderBrowserDialog.SelectedPath;
+            }
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("Вы не выбрали папку");
             }
 
-            string folderName = folderPath.Split('\\')[folderPath.Split('\\').Length - 1]; //название папки
+            string folderName = folderPath.Split('\\')[folderPath.Split('\\').Length - 1];
 
             dataTree.Header = folderName;
 
-            foreach (string filePath in Directory.EnumerateFiles(folderPath))//Возвращает перечисляемую коллекцию полных имен файлов, соответствующих шаблону поиска по указанному пути
+            foreach (string filePath in Directory.EnumerateFiles(folderPath))
             {
                 if (filePath.Substring(filePath.Length - 4, 4) == "json")
                 {
@@ -44,7 +45,7 @@ namespace Laba5
 
                     Table table = ReadTable.TableRead(schemeOfTable, pathTable);
 
-                    schemesAndTablesDict.Add(schemeOfTable, table);
+                    schemesTables.Add(schemeOfTable, table);
 
                     TreeViewItem tableTree = new TreeViewItem();
 
@@ -68,7 +69,7 @@ namespace Laba5
             DataTable.Columns.Clear();
             string tableName = ((TreeViewItem)sender).Header.ToString();
 
-            foreach (var schemeAndTable in schemesAndTablesDict)
+            foreach (var schemeAndTable in schemesTables)
             {
                 if (schemeAndTable.Key.Name == tableName)
                 {
@@ -99,6 +100,10 @@ namespace Laba5
                     break;
                 }
             }
+        }
+        private class RowAdapter
+        {
+            public List<Object> Data { get; set; }
         }
         private void TableTreeUnselected(object sender, RoutedEventArgs e)
         {

@@ -19,7 +19,7 @@
             <ColumnDefinition Width="460"/>
         </Grid.ColumnDefinitions>
         <Menu Grid.ColumnSpan="3" Foreground="DarkGreen" Background="White">
-            <MenuItem Header="Open file" Click="MenuOpenFileClick"/>
+            <MenuItem Header="Open file" Click="OpenFile"/>
         </Menu>
         <TextBlock Grid.Column="1" Grid.Row ="1" Grid.RowSpan="2"/>
         <TextBlock Grid.Column="2" Grid.Row ="1" Grid.RowSpan="2"/>

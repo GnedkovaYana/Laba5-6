@@ -87,7 +87,6 @@
     <Compile Include="Column.cs" />
     <Compile Include="ReadTable.cs" />
     <Compile Include="Row.cs" />
-    <Compile Include="RowAdapter.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="TableScheme.cs" />
     <Page Include="MainWindow.xaml">
