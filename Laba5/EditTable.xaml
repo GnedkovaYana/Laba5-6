@@ -1,0 +1,46 @@
+﻿<Window x:Class="Laba5.EditTable"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Laba5"
+        mc:Ignorable="d"
+        Title="EditTable" Height="680" Width="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="310"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="165" />
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="90"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row ="3">Изменить название таблицы</TextBlock>
+        <TextBlock Grid.Row ="4">Выберете название столбца, <LineBreak/>который хотите изменить</TextBlock>
+        <TextBlock Grid.Row ="5">Изменить название столбца</TextBlock>
+        <TextBlock Grid.Row ="6">Добавить столбец</TextBlock>
+        <TextBlock Grid.Row ="7">Выберете тип для нового  <LineBreak/> столбца</TextBlock>
+        <TextBlock Grid.Row ="8">Удалить столбец</TextBlock>
+        <TextBox Name ="ChangeTable" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="3"/>
+        <TextBox Name ="ChangeColumn" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="4"/>
+        <TextBox Name ="AddColumn" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="6"/>
+        <TextBox Name ="DeleteColumn" Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="4"/>
+        <ComboBox Name="OldNameColumn" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="4"></ComboBox>
+        <ComboBox Name="TypeColumn" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="7"></ComboBox>
+        <Button Click="SaveChangeTable"  Grid.ColumnSpan="5" Grid.Row="9" Width="80" Height="30">Сохранить</Button>
+        <Button Click="SaveChangeTable2"  Grid.ColumnSpan="5" Grid.Row="9" Width="80" Height="30" HorizontalAlignment="Right">Сохранить2</Button>
+        <DataGrid Grid.ColumnSpan="5" Grid.RowSpan="3" Name="DataTable2" AutoGenerateColumns="False" Background="White"/>
+
+    </Grid>
+</Window>

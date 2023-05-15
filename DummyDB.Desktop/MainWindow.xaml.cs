@@ -5,9 +5,9 @@ using System.IO;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
+using Laba5;
 
-namespace Laba5
+namespace DummyDB.Desktop
 {
 
     public partial class MainWindow : Window
@@ -26,53 +26,54 @@ namespace Laba5
         {
             tables = new List<Table>();
             dataTree.Items.Clear();
-            FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
-            string folderPath = "";
-            if (openFolderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.Title = "Выберите БД";
+            dialog.Filter = "Файл базы данных(*.db)|*.db";
+
+            dialog.ShowDialog();
+
+            string folderPath = File.ReadAllText(dialog.FileName);
+
+            string folderName = folderPath.Split('\\')[folderPath.Split('\\').Length - 1];
+
+            dataTree.Header = folderName;
+
+            foreach (string filePath in Directory.EnumerateDirectories(folderPath))
             {
-                folderPath = openFolderDialog.SelectedPath;
+                TableScheme tableScheme = null;
+                string csvData = null;
 
-                string folderName = folderPath.Split('\\')[folderPath.Split('\\').Length - 1];
-
-                dataTree.Header = folderName;
-
-                foreach (string filePath in Directory.EnumerateDirectories(folderPath))
+                foreach (string file in Directory.EnumerateFiles(filePath))
                 {
-                    TableScheme tableScheme = null;
-                    string csvData = null;
-
-                    foreach (string file in Directory.EnumerateFiles(filePath))
+                    if (file.Contains("json"))
                     {
-                        if (file.Contains("json"))
-                        {
-                            string jsonScheme = File.ReadAllText(file);
-                            tableScheme = JsonSerializer.Deserialize<TableScheme>(jsonScheme);
-                        }
-
-                        if (file.Contains("csv"))
-                        {
-                            csvData = file;
-                        }
+                        string jsonScheme = File.ReadAllText(file);
+                        tableScheme = JsonSerializer.Deserialize<TableScheme>(jsonScheme);
                     }
 
-                    Table table = ReadTable.TableRead(tableScheme, filePath);
-                    tables.Add(table);
-                }
-
-
-                foreach (Table table in tables)
-                {
-                    TreeViewItem treeItem = new TreeViewItem();
-                    treeItem.Selected += TableTreeSelected;
-                    treeItem.Unselected += TableTreeUnselected;
-                    treeItem.Header = table.Scheme.Name;
-
-                    foreach (Column key in table.Scheme.Columns)
+                    if (file.Contains("csv"))
                     {
-                        treeItem.Items.Add(key.Name + " - " + key.Type);
+                        csvData = file;
                     }
-                    ((MainWindow)System.Windows.Application.Current.MainWindow).dataTree.Items.Add(treeItem);
                 }
+
+                Table table = ReadTable.TableRead(tableScheme, filePath);
+                tables.Add(table);
+            }
+
+
+            foreach (Table table in tables)
+            {
+                TreeViewItem treeItem = new TreeViewItem();
+                treeItem.Selected += TableTreeSelected;
+                treeItem.Unselected += TableTreeUnselected;
+                treeItem.Header = table.Scheme.Name;
+
+                foreach (Column key in table.Scheme.Columns)
+                {
+                    treeItem.Items.Add(key.Name + " - " + key.Type);
+                }
+                ((MainWindow)System.Windows.Application.Current.MainWindow).dataTree.Items.Add(treeItem);
             }
         }
 
