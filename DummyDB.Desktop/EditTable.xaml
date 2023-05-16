@@ -21,10 +21,8 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="165" />
+            <ColumnDefinition Width="340" />
             <ColumnDefinition Width="80" />
-            <ColumnDefinition Width="100" />
-            <ColumnDefinition Width="150" />
-            <ColumnDefinition Width="90"/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row ="3">Изменить название таблицы</TextBlock>
         <TextBlock Grid.Row ="4">Выберете название столбца, <LineBreak/>который хотите изменить</TextBlock>
@@ -32,16 +30,24 @@
         <TextBlock Grid.Row ="6">Добавить столбец</TextBlock>
         <TextBlock Grid.Row ="7">Выберете тип для нового  <LineBreak/> столбца</TextBlock>
         <TextBlock Grid.Row ="8">Удалить столбец</TextBlock>
-        <TextBox Name ="ChangeTable" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="3"/>
-        <TextBox Name ="ChangeColumn" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="4"/>
-        <TextBox Name ="AddColumn" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="6"/>
-        <TextBox Name ="DeleteColumn" Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="4"/>
-        <ComboBox Name="OldNameColumn" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="4"></ComboBox>
-        <ComboBox Name="TypeColumn" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="7"></ComboBox>
-        <Button Click="SaveChangeTable"  Grid.ColumnSpan="5" Grid.Row="9" Width="80" Height="30">Сохранить</Button>
-        <Button Click="SaveChangeTable2"  Grid.ColumnSpan="5" Grid.Row="9" Width="80" Height="30" HorizontalAlignment="Right">Сохранить2</Button>
-        <Button Click="SaveChangeTable3"  Grid.ColumnSpan="4" Grid.Row="9" Width="80" Height="30" HorizontalAlignment="Right">Сохранить3</Button>
+        <TextBox Name ="ChangeTable" Grid.Column="1" Grid.Row="3"/>
+        <TextBox Name ="ChangeColumn" Grid.Column="1" Grid.Row="5"/>
+        <TextBox Name ="AddColumn" Grid.Column="1" Grid.Row="6"/>
+        <ComboBox Name="OldNameColumn" Grid.Column="1" Grid.Row="4"></ComboBox>
+        <ComboBox Name="DeleteColumn" Grid.Column="1" Grid.Row="8"></ComboBox>
+        <ComboBox Name="TypeColumn" Grid.Column="1" Grid.Row="7">
+            <ComboBoxItem Content="int"/>
+            <ComboBoxItem Content="string"/>
+            <ComboBoxItem Content="dataTime"/>
+            <ComboBoxItem Content="double"/>
+        </ComboBox>
+        <Button Click="SaveChangeTable"  Grid.ColumnSpan="5" Grid.Row="9" Width="120" Height="30">Сохранить таблицу</Button>
+        <Button Click="SaveChangeNameTable"  Grid.Column="2" Grid.Row="3">Сохранить</Button>
+        <Button Click="SaveNameColumn"  Grid.Column="2" Grid.Row="4">Сохранить</Button>
+        <Button Click="SaveChangeNameColumn"  Grid.Column="2" Grid.Row="5">Сохранить</Button>
+        <Button Click="SaveAddColumn"  Grid.Column="2" Grid.Row="6">Сохранить</Button>
+        <Button Click="SaveNewType" Grid.Column="2" Grid.Row="7">Сохранить</Button>
+        <Button Click="SaveDeleteColumn"  Grid.Column="2" Grid.Row="8">Сохранить</Button>
         <DataGrid Grid.ColumnSpan="5" Grid.RowSpan="3" Name="DataTable2" AutoGenerateColumns="False" Background="White"/>
-
     </Grid>
 </Window>

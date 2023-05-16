@@ -17,10 +17,7 @@ namespace DummyDB.Desktop
         {
             InitializeComponent();
         }
-
-        //private Dictionary<TableScheme, Table> schemesTables = new Dictionary<TableScheme, Table>();
         List<Table> tables = new List<Table>();
-
 
         private void OpenFile(object sender, RoutedEventArgs e)
         {
@@ -147,8 +144,15 @@ namespace DummyDB.Desktop
 
         private void EditTable(object sender, RoutedEventArgs e)
         {
-            EditTable editTable = new EditTable(table);
-            editTable.Show();
+            if (table == null)
+            {
+                MessageBox.Show("Вы хуйло дважды");
+            }
+            else
+            {
+                EditTable editTable = new EditTable(table);
+                editTable.Show();
+            }          
         }
     }
 }

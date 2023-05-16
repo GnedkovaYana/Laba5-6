@@ -17,65 +17,11 @@ namespace DummyDB.Desktop
             LoadTable();
             LoadComboBox();
         }
-
-
-
         private Dictionary<TableScheme, Table> schemesTables = new Dictionary<TableScheme, Table>();
-        private void OpenFile(object sender, RoutedEventArgs e)
-        {
-
-
-            //TreeViewItem tableTree = new TreeViewItem();
-
-            //tableTree.Header = table.Scheme.Name;
-
-            //tableTree.Selected += TableTreeSelected;
-
-            //tableTree.Unselected += TableTreeUnselected;
-
-            //dataTree.Items.Add(tableTree);
-
-        }
-
-        //private void TableTreeSelected(object sender, RoutedEventArgs e)
-        //{
-        //    DataTable.Columns.Clear();
-        //    string tableName = ((TreeViewItem)sender).Header.ToString();
-        //    DataTable dataTable = new DataTable();
-
-
-        //    List<RowAdapter> rowsData = new List<RowAdapter>();
-
-        //    foreach (Row row in table.Rows)
-        //    {
-        //        List<object> rowData = new List<object>();
-        //        foreach (object cell in row.Data.Values)
-        //        {
-        //            rowData.Add(cell);
-        //        }
-        //        rowsData.Add(new RowAdapter() { Data = rowData });
-        //    }
-
-        //    DataTable.ItemsSource = rowsData;
-
-        //    for (int i = 0; i < table.Scheme.Columns.Count; i++)
-        //    {
-        //        DataGridTextColumn tableTextColumn = new DataGridTextColumn()
-        //        {
-        //            Header = table.Scheme.Columns[i].Name,
-        //            Binding = new System.Windows.Data.Binding($"Data[{i}]")
-        //        };
-
-        //        DataTable.Columns.Add(tableTextColumn);
-        //    }
-        //    Columns.Add(tableTextColumn);
-        //}
-
         public void LoadTable()
         {
             DataTable2.Columns.Clear();
             DataTable dataTable = new DataTable();
-
 
             List<RowAdapter> rowsData = new List<RowAdapter>();
 
@@ -108,8 +54,10 @@ namespace DummyDB.Desktop
             foreach (Column column in table.Scheme.Columns)
             {
                 OldNameColumn.Items.Add(column.Name);
+                DeleteColumn.Items.Add(column.Name);
             }
         }
+
         private class RowAdapter
         {
             public List<Object> Data { get; set; }
@@ -117,45 +65,175 @@ namespace DummyDB.Desktop
 
         private void SaveChangeTable(object sender, RoutedEventArgs e)
         {
+            List<RowAdapter> rowAdapters = (List<RowAdapter>)DataTable2.ItemsSource;
+            
+            for (int i = 0; i < rowAdapters.Count; i++)
+            {
+                for (int j = 0; j < rowAdapters[i].Data.Count; j++)
+                {
+                    if (table.Scheme.Columns[j].Type == "uint")
+                    {
+                        if (uint.TryParse(rowAdapters[i].Data[j].ToString(), out uint number))
+                        {
+                            table.Rows[i].Data[table.Scheme.Columns[j]] = number;
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Вы хуйло, потому что в строке {i+1} в столбце {table.Scheme.Columns[j].Name} неверный тип данных");
+                        }
 
+                    }
+                    else if (table.Scheme.Columns[j].Type == "double")
+                    {
+                        if (double.TryParse(rowAdapters[i].Data[j].ToString(), out double doubleNumber))
+                        {
+                            table.Rows[i].Data[table.Scheme.Columns[j]] = doubleNumber;
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Вы хуйло, потому что в строке {i+1} в столбце {table.Scheme.Columns[j].Name} неверный тип данных");
+                        }
+                    }
+                    else if (table.Scheme.Columns[j].Type == "datatime")
+                    {
+                        if (DateTime.TryParse(rowAdapters[i].Data[j].ToString(), out DateTime datetimeNamber))
+                        {
+                            table.Rows[i].Data[table.Scheme.Columns[j]] = datetimeNamber;
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Вы хуйло, потому что в строке {i+1} в столбце {table.Scheme.Columns[j].Name} неверный тип данных");
+                        }
+                    }
+                    else
+                    {
+                        table.Rows[i].Data[table.Scheme.Columns[j]] = rowAdapters[i].Data[j].ToString();                    
+                    }
+                }
+            }
+            table.Save();
         }
 
-
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void SaveChangeTable2(object sender, RoutedEventArgs e)
+        private void SaveChangeNameTable(object sender, RoutedEventArgs e)
         {
             string newName = ChangeTable.Text;
             table.Scheme.Name = newName;
             table.Save();
         }
 
-        private void SaveChangeTable3(object sender, RoutedEventArgs e)
+        private void SaveNameColumn(object sender, RoutedEventArgs e)
         {
             string oldName = OldNameColumn.Text;
             Column CurretColumn = null;
-            foreach (Column column in table.Scheme.Columns)
-            {
-                if (column.Name == oldName)
-                {
-                    CurretColumn = column;
-                }
-            }
+            CurretColumn = GetColumnByName(oldName);
 
-            if (CurretColumn != null) 
+            if (CurretColumn != null)
             {
-                CurretColumn.Name = ChangeColumn.Text; 
+                CurretColumn.Name = ChangeColumn.Text;
             }
             else
             {
-                MessageBox.Show("ывапролд");
+                MessageBox.Show("Вы не выбрали название столбца");
             }
 
             table.Save();
         }
-    }
 
+        private Column GetColumnByName(string oldName)
+        {
+            foreach (Column column in table.Scheme.Columns)
+            {
+                if (column.Name == oldName)
+                {
+                    return column;
+                }
+            }
+
+            return null;
+        }
+
+        private void SaveChangeNameColumn(object sender, RoutedEventArgs e)
+        {
+            
+
+        }
+
+        private void SaveAddColumn(object sender, RoutedEventArgs e)
+        {
+            if (AddColumn.Text == "" || TypeColumn.Text == "")
+            {
+                MessageBox.Show("вы хуйло трижды");
+            }
+            else if (IsColumnExist(AddColumn.Text))
+            {
+                MessageBox.Show("вы хуйло четырежды");
+            }
+
+            else
+            {
+                Column column = new Column { Name = AddColumn.Text, Type = TypeColumn.Text };
+                table.Scheme.Columns.Add(column);
+                foreach (Row row in table.Rows) 
+                {
+                    if (column.Type == "int")
+                    {
+                        row.Data.Add(column, 0);
+                    }
+                    else if (column.Type == "string")
+                    {
+                        row.Data.Add(column, "");
+                    }
+                    else if (column.Type == "double")
+                    {
+                        row.Data.Add(column, 0);
+                    }
+                    else if (column.Type == "dateTime")
+                    {
+                        row.Data.Add(column, DateTime.MinValue);
+                    }
+                }
+                table.Save();
+                MessageBox.Show("вы уже не хуйло");
+
+            }
+            
+
+        }
+
+        private void SaveNewType(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SaveDeleteColumn(object sender, RoutedEventArgs e)
+        {
+            string deleteColumn = DeleteColumn.Text;
+            Column column = GetColumnByName(deleteColumn);
+            if (column != null)
+            {
+                table.Scheme.Columns.Remove(column);
+                foreach (Row row in table.Rows)
+                {
+                    row.Data.Remove(column);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Вы не выбрали название столбца");
+            }
+            table.Save();
+        }
+
+        public bool IsColumnExist(string columnName)
+        {
+            foreach (Column column in table.Scheme.Columns)
+            { 
+                if (column.Name == columnName) 
+                {
+                    return true;
+                } 
+            }
+            return false;
+        }
+    }
 }

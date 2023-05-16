@@ -27,7 +27,6 @@ namespace DummyDB.Desktop
                 table.Save();
 
                 MessageBox.Show("Файл создан!");
-
             }
         }
 

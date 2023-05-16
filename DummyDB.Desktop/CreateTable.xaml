@@ -13,6 +13,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
@@ -33,6 +34,6 @@
         </ComboBox>
         <Button Click="SaveTable" Grid.Row="4" Grid.ColumnSpan="3" Width="300" Height="25" VerticalAlignment="Bottom">Сохранить таблицу</Button>
         <Button Click="AddColumn" Grid.Row="3" Grid.ColumnSpan="3" Width="300" Height="25" VerticalAlignment="Bottom">Добавить столбец</Button>
-        <TextBox x:Name="folderPathTextBox" Grid.Row="4" Grid.ColumnSpan="2" Width="300" Height="25" VerticalAlignment="Bottom" Grid.Column="1" Margin="82,0,93,-25" ></TextBox>
+        <TextBox x:Name="folderPathTextBox" Grid.Row="5" Grid.ColumnSpan="3" Width="300" Height="25" VerticalAlignment="Bottom"></TextBox>
     </Grid>
 </Window>
