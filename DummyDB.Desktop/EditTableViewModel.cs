@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace DummyDB.Desktop
@@ -87,22 +88,58 @@ namespace DummyDB.Desktop
 
         public ICommand SaveChangeNameTable => new CommandDelegate(param =>
         {
-
+            if (string.IsNullOrEmpty(ChangeTable))
+            {
+                MessageBox.Show("Вы не ввели назание таблицы");
+            }
+            else
+            {
+                table.UptadeTableName(ChangeTable);
+                MessageBox.Show("Таблица переименована");
+            }
         });
 
         public ICommand SaveNameColumn => new CommandDelegate(param =>
         {
-
+            if (string.IsNullOrEmpty(ChangeColumn) || SelectedColumnToChange == null)
+            {
+                MessageBox.Show("Вы не ввели новое название столбца или не выбрали столбец");
+            }
+            else
+            {
+                table.UptadeColumnName(ChangeColumn, SelectedColumnToChange.Name);
+                MessageBox.Show("Столбец переименован");
+                UpdateView();
+            }
         });
 
         public ICommand SaveAddColumn => new CommandDelegate(param =>
         {
+            if (string.IsNullOrEmpty(ColumnType) || string.IsNullOrEmpty(AddColumn))
+            {
+                MessageBox.Show("Вы не выбрали тип столбца или ввели его назание");
+            }
+            else
+            {
+                table.AddColumn(AddColumn, ColumnType, false );
+                MessageBox.Show("Столбец добален");
+                UpdateView();
+            }
 
         });
 
         public ICommand SaveDeleteColumn => new CommandDelegate(param =>
         {
-
+            if (SelectedColumnToDelete == null) 
+            {
+                MessageBox.Show("Вы не выбрали столбец");
+            }
+            else
+            {
+                table.RemoveColumn(SelectedColumnToDelete.Name);
+                MessageBox.Show("Столбец удален");
+                UpdateView();
+            }
         });
 
         public ICommand SaveAddRow => new CommandDelegate(param =>
@@ -146,6 +183,27 @@ namespace DummyDB.Desktop
             DataTable = dataTable;
         }
 
+        public void UpdateView()
+        {
+            UpdateColumns();
+
+            List<Row> newRows = new List<Row>();
+            foreach (Row row in table.Rows)
+            {
+                newRows.Add(row);
+            }
+            Rows = newRows;
+            LoadTable();
+        }
+
+        private void UpdateColumns()
+        {
+            Columns.Clear();
+            foreach (Column column in table.Scheme.Columns)
+            {
+                Columns.Add(column);
+            }
+        }
     }
 
 }
