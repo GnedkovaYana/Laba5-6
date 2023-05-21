@@ -56,13 +56,13 @@ namespace Laba5
 
         }
 
-        public void UptadeTableName(string tableName)
+        public void UpdateTableName(string tableName)
         {
             Scheme.Name = tableName;
             Save();
         }
 
-        public void UptadeColumnName(string  newColumnName,  string oldColumnName) 
+        public void UpdateColumnName(string  newColumnName,  string oldColumnName) 
         {
             Column CurretColumn = null;
             CurretColumn = GetColumnByName(oldColumnName);
@@ -184,6 +184,11 @@ namespace Laba5
                 }
             }
             return null;
+        }
+
+        public override string ToString()
+        {
+            return Scheme.Name;
         }
     }
 }

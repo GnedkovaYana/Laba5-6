@@ -17,5 +17,7 @@ namespace Laba5
         {
             return Name;
         }
+
+        public string TreeViewString => Name + " - " + Type;
     }
 }

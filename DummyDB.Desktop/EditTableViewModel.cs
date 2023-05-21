@@ -95,7 +95,7 @@ namespace DummyDB.Desktop
             }
             else
             {
-                table.UptadeTableName(ChangeTable);
+                table.UpdateTableName(ChangeTable);
                 MessageBox.Show("Таблица переименована");
             }
         });
@@ -108,7 +108,7 @@ namespace DummyDB.Desktop
             }
             else
             {
-                table.UptadeColumnName(ChangeColumn, SelectedColumnToChange.Name);
+                table.UpdateColumnName(ChangeColumn, SelectedColumnToChange.Name);
                 MessageBox.Show("Столбец переименован");
                 UpdateView();
             }
