@@ -5,6 +5,7 @@ using System.IO;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using Laba5;
 
 namespace DummyDB.Desktop
@@ -23,55 +24,53 @@ namespace DummyDB.Desktop
         {
             tables = new List<Table>();
             dataTree.Items.Clear();
-            var dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.Title = "Выберите БД";
-            dialog.Filter = "Файл базы данных(*.db)|*.db";
+            FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
+            string folderPath = "";
 
-            dialog.ShowDialog();
-
-            string folderPath = File.ReadAllText(dialog.FileName);
-
-            string folderName = folderPath.Split('\\')[folderPath.Split('\\').Length - 1];
-
-            dataTree.Header = folderName;
-
-            foreach (string filePath in Directory.EnumerateDirectories(folderPath))
+            if (openFolderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                TableScheme tableScheme = null;
-                string csvData = null;
+                folderPath = openFolderDialog.SelectedPath;
+                string folderName = folderPath.Split('\\')[folderPath.Split('\\').Length - 1];
 
-                foreach (string file in Directory.EnumerateFiles(filePath))
+                dataTree.Header = folderName;
+
+                foreach (string filePath in Directory.EnumerateDirectories(folderPath))
                 {
-                    if (file.Contains("json"))
+                    TableScheme tableScheme = null;
+                    string csvData = null;
+
+                    foreach (string file in Directory.EnumerateFiles(filePath))
                     {
-                        string jsonScheme = File.ReadAllText(file);
-                        tableScheme = JsonSerializer.Deserialize<TableScheme>(jsonScheme);
+                        if (file.Contains("json"))
+                        {
+                            string jsonScheme = File.ReadAllText(file);
+                            tableScheme = JsonSerializer.Deserialize<TableScheme>(jsonScheme);
+                        }
+
+                        if (file.Contains("csv"))
+                        {
+                            csvData = file;
+                        }
                     }
 
-                    if (file.Contains("csv"))
-                    {
-                        csvData = file;
-                    }
+                    Table table = ReadTable.TableRead(tableScheme, filePath);
+                    tables.Add(table);
                 }
 
-                Table table = ReadTable.TableRead(tableScheme, filePath);
-                tables.Add(table);
-            }
-
-
-            foreach (Table table in tables)
-            {
-                TreeViewItem treeItem = new TreeViewItem();
-                treeItem.Selected += TableTreeSelected;
-                treeItem.Unselected += TableTreeUnselected;
-                treeItem.Header = table.Scheme.Name;
-
-                foreach (Column key in table.Scheme.Columns)
+                foreach (Table table in tables)
                 {
-                    treeItem.Items.Add(key.Name + " - " + key.Type);
-                }
+                    TreeViewItem treeItem = new TreeViewItem();
+                    treeItem.Selected += TableTreeSelected;
+                    treeItem.Unselected += TableTreeUnselected;
+                    treeItem.Header = table.Scheme.Name;
+
+                    foreach (Column key in table.Scheme.Columns)
+                    {
+                        treeItem.Items.Add(key.Name + " - " + key.Type);
+                    }
                 ((MainWindow)System.Windows.Application.Current.MainWindow).dataTree.Items.Add(treeItem);
-            }
+                }
+            }            
         }
 
         private void TableTreeSelected(object sender, RoutedEventArgs e)
@@ -146,7 +145,7 @@ namespace DummyDB.Desktop
         {
             if (table == null)
             {
-                MessageBox.Show("Вы хуйло дважды");
+                System.Windows.MessageBox.Show("Вы не выбрали таблицу");
             }
             else
             {

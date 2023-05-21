@@ -8,6 +8,7 @@ namespace DummyDB.Desktop
     public partial class CreateTable : Window
     {
         TableScheme scheme;
+        bool IsAddPrimary = false;
         public CreateTable()
         {
             InitializeComponent();
@@ -17,23 +18,45 @@ namespace DummyDB.Desktop
 
         private void SaveTable(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(nameTable.Text) && !string.IsNullOrEmpty(nameColumn.Text) && !string.IsNullOrEmpty(nameType.Text))
+            if (!(IsAddPrimary))
             {
-                scheme.Name = nameTable.Text;
-                string jsonScheme = JsonSerializer.Serialize<TableScheme>(scheme);
+                MessageBox.Show("Вы не добавили Primary");
+            }
+            else 
+            {
+                if (!string.IsNullOrEmpty(nameTable.Text) && !string.IsNullOrEmpty(nameColumn.Text) && !string.IsNullOrEmpty(nameType.Text))
+                {
 
-                string folderPath = folderPathTextBox.Text;
-                Table table = new Table(scheme, folderPath);
-                table.Save();
+                    scheme.Name = nameTable.Text;
+                    string jsonScheme = JsonSerializer.Serialize<TableScheme>(scheme);
 
-                MessageBox.Show("Файл создан!");
+                    string folderPath = folderPathTextBox.Text;
+                    Table table = new Table(scheme, folderPath);
+                    table.Save();
+
+                    MessageBox.Show("Файл создан!");
+                }
             }
         }
 
         private void AddColumn(object sender, RoutedEventArgs e)
         {
-            scheme.Columns.Add(new Column { Name = nameColumn.Text, Type = nameType.Text });
+            if ((bool)Primary.IsChecked)
+            {
+                if (IsAddPrimary)
+                {
+                    MessageBox.Show("Вы уже да");
+                }
+                else
+                {
+                    scheme.Columns.Add(new Column { Name = nameColumn.Text, Type = nameType.Text, IsPrimary = true });
+                    IsAddPrimary = true;
+                }
+            }
+            else
+            {
+                scheme.Columns.Add(new Column { Name = nameColumn.Text, Type = nameType.Text, IsPrimary = false});
+            }
         }
-
     }
 }

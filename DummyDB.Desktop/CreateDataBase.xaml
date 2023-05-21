@@ -15,17 +15,16 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
-            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="70" />
             <ColumnDefinition Width="110" />
-            <ColumnDefinition Width="100" />
-            <ColumnDefinition Width="90" />
-            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="105" />
+            <ColumnDefinition Width="105" />
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="1" Grid.ColumnSpan="2"> Введите название базы данных:</TextBlock>
+        <TextBlock Grid.Column="1" Grid.ColumnSpan="2" Foreground="DarkGreen" > Введите название базы данных:</TextBlock>
         <TextBox Name ="nameDB" Grid.Column="3" Grid.ColumnSpan="2"/>
-        <TextBlock Grid.Row="2" Grid.Column="1">Вы выбрали:</TextBlock>
-        <TextBox x:Name="SpasiISoxrani" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4"></TextBox>
-        <TextBox x:Name="folder" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3" Height="20" Width="300" HorizontalAlignment="Right"  VerticalAlignment="Top"></TextBox>
-        <Button Click="OK" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="4"  Grid.Row="3" Width="65" Height="20">Сохранить</Button>
+        <Button Click="ChooseSave" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="5" Grid.Row="1" BorderBrush="DarkGreen" Background="DarkGreen" Foreground="White">Выберете место для хранения вашей базы данных</Button>
+        <TextBlock Grid.Row="2" Grid.Column="1"  Foreground="DarkGreen">Вы выбрали:</TextBlock>
+        <TextBox x:Name="folder" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3" Height="20" Width="310" HorizontalAlignment="Right"  VerticalAlignment="Top"></TextBox>
+        <Button Click="OK" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="4"  Grid.Row="3" Width="65" Height="20" BorderBrush="DarkGreen" Background="DarkGreen" Foreground="White">Сохранить</Button>
     </Grid>
 </Window>

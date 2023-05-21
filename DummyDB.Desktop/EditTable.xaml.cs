@@ -18,6 +18,7 @@ namespace DummyDB.Desktop
             LoadComboBox();
         }
         private Dictionary<TableScheme, Table> schemesTables = new Dictionary<TableScheme, Table>();
+        Column primaryColumn = null;
         public void LoadTable()
         {
             DataTable2.Columns.Clear();
@@ -55,6 +56,14 @@ namespace DummyDB.Desktop
             {
                 OldNameColumn.Items.Add(column.Name);
                 DeleteColumn.Items.Add(column.Name);
+                if (column.IsPrimary)
+                {
+                    primaryColumn = column;
+                }
+            }
+            foreach (Row row in table.Rows)
+            {
+                DeleteRow.Items.Add(row.Data[primaryColumn]);
             }
         }
 
@@ -79,7 +88,7 @@ namespace DummyDB.Desktop
                         }
                         else
                         {
-                            MessageBox.Show($"Вы хуйло, потому что в строке {i+1} в столбце {table.Scheme.Columns[j].Name} неверный тип данных");
+                            MessageBox.Show($"Ошибка: в строке {i+1} в столбце {table.Scheme.Columns[j].Name} неверный тип данных");
                         }
 
                     }
@@ -91,7 +100,7 @@ namespace DummyDB.Desktop
                         }
                         else
                         {
-                            MessageBox.Show($"Вы хуйло, потому что в строке {i+1} в столбце {table.Scheme.Columns[j].Name} неверный тип данных");
+                            MessageBox.Show($"Ошибка: в строке {i+1} в столбце {table.Scheme.Columns[j].Name} неверный тип данных");
                         }
                     }
                     else if (table.Scheme.Columns[j].Type == "datatime")
@@ -102,7 +111,7 @@ namespace DummyDB.Desktop
                         }
                         else
                         {
-                            MessageBox.Show($"Вы хуйло, потому что в строке {i+1} в столбце {table.Scheme.Columns[j].Name} неверный тип данных");
+                            MessageBox.Show($"Ошибка: в строке {i+1} в столбце {table.Scheme.Columns[j].Name} неверный тип данных");
                         }
                     }
                     else
@@ -119,6 +128,7 @@ namespace DummyDB.Desktop
             string newName = ChangeTable.Text;
             table.Scheme.Name = newName;
             table.Save();
+            MessageBox.Show("Таблица переименована");
         }
 
         private void SaveNameColumn(object sender, RoutedEventArgs e)
@@ -137,6 +147,7 @@ namespace DummyDB.Desktop
             }
 
             table.Save();
+            MessageBox.Show("Столбец переименован");
         }
 
         private Column GetColumnByName(string oldName)
@@ -152,17 +163,25 @@ namespace DummyDB.Desktop
             return null;
         }
 
-        private void SaveChangeNameColumn(object sender, RoutedEventArgs e)
+        private Row GetRowByName(string deleteRow)
         {
-            
-
+            foreach (Row row in table.Rows) 
+            {
+                if (row.Data[primaryColumn].ToString() == deleteRow)
+                {
+                    return row;
+                }
+                
+            }
+            return null;
         }
+
 
         private void SaveAddColumn(object sender, RoutedEventArgs e)
         {
             if (AddColumn.Text == "" || TypeColumn.Text == "")
             {
-                MessageBox.Show("вы хуйло трижды");
+                MessageBox.Show("Вы не указали навание столбца или его тип");
             }
             else if (IsColumnExist(AddColumn.Text))
             {
@@ -175,7 +194,7 @@ namespace DummyDB.Desktop
                 table.Scheme.Columns.Add(column);
                 foreach (Row row in table.Rows) 
                 {
-                    if (column.Type == "int")
+                    if (column.Type == "uint")
                     {
                         row.Data.Add(column, 0);
                     }
@@ -193,22 +212,18 @@ namespace DummyDB.Desktop
                     }
                 }
                 table.Save();
-                MessageBox.Show("вы уже не хуйло");
-
+                MessageBox.Show("Новый столбец добален");
             }
-            
-
-        }
-
-        private void SaveNewType(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void SaveDeleteColumn(object sender, RoutedEventArgs e)
         {
             string deleteColumn = DeleteColumn.Text;
             Column column = GetColumnByName(deleteColumn);
+            if (column.IsPrimary)
+            {
+                MessageBox.Show("Вы не можете ни че го!");
+            }
             if (column != null)
             {
                 table.Scheme.Columns.Remove(column);
@@ -221,7 +236,9 @@ namespace DummyDB.Desktop
             {
                 MessageBox.Show("Вы не выбрали название столбца");
             }
+
             table.Save();
+            MessageBox.Show("Столбец удален");
         }
 
         public bool IsColumnExist(string columnName)
@@ -234,6 +251,42 @@ namespace DummyDB.Desktop
                 } 
             }
             return false;
+        }
+
+        private void SaveAddRow(object sender, RoutedEventArgs e)
+        {
+            Row row = new Row();
+            foreach (Column column in table.Scheme.Columns)
+            {
+                if (column.Type == "uint")
+                {
+                    row.Data.Add(column, 0);
+                }
+                else if (column.Type == "string")
+                {
+                    row.Data.Add(column, "");
+                }
+                else if (column.Type == "double")
+                {
+                    row.Data.Add(column, 0);
+                }
+                else if (column.Type == "dateTime")
+                {
+                    row.Data.Add(column, DateTime.MinValue);
+                }
+            }
+            table.Rows.Add(row);
+            table.Save();
+            MessageBox.Show("Строка добавлена");
+        }
+
+        private void SaveDeleteRow(object sender, RoutedEventArgs e)
+        {
+            string deleteRow = DeleteRow.Text;
+            Row row = GetRowByName(deleteRow);
+            table.Rows.Remove(row);
+            table.Save();
+            MessageBox.Show("Строка удалена");
         }
     }
 }
