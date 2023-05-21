@@ -12,5 +12,10 @@ namespace Laba5
 
         [JsonPropertyName("isPrimary")]
         public bool IsPrimary { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

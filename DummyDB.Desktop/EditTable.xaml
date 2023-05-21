@@ -41,31 +41,26 @@
         <TextBlock Grid.Row ="2" Grid.Column="4" Foreground="DarkGreen">Добавить строку</TextBlock>
         <TextBlock Grid.Row ="3" Grid.Column="4" Foreground="DarkGreen">Выберете строку, которую <LineBreak/>хотите удалить</TextBlock>
         <TextBlock Grid.Row ="4" Grid.Column="4" Foreground="DarkGreen">Редактирование <LineBreak/> осуществляется в таблице</TextBlock>
-        
-        <TextBox Name ="ChangeTable" Grid.Column="1" Grid.Row="2"/>
-        <ComboBox Name="OldNameColumn" Grid.Column="1" Grid.Row="3"></ComboBox>
-        <TextBox Name ="ChangeColumn" Grid.Column="1" Grid.Row="4"/>
-        <TextBox Name ="AddColumn" Grid.Column="1" Grid.Row="5"/>
-        <ComboBox Name="TypeColumn" Grid.Column="1" Grid.Row="6">
-            <ComboBoxItem Content="uint"/>
-            <ComboBoxItem Content="string"/>
-            <ComboBoxItem Content="dataTime"/>
-            <ComboBoxItem Content="double"/>
-        </ComboBox>
-        <ComboBox Name="DeleteColumn" Grid.Column="1" Grid.Row="7"></ComboBox>
 
-        <Button Click="SaveChangeNameTable"  Grid.Column="2" Grid.Row="2" Background="DarkGreen" Foreground="White" >Save</Button>
-        <Button Click="SaveNameColumn"  Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" Background="DarkGreen" Foreground="White">Save</Button>
-        <Button Click="SaveAddColumn"  Grid.Column="2" Grid.Row="5" Grid.RowSpan="2" Background="DarkGreen" Foreground="White">Save</Button>
-        <Button Click="SaveDeleteColumn"  Grid.Column="2" Grid.Row="7" Background="DarkGreen" Foreground="White">Save</Button>
+        <TextBox Name ="ChangeTable" Text="{Binding ChangeTable}" Grid.Column="1" Grid.Row="2"/>
+        <ComboBox Name="OldNameColumn" ItemsSource="{Binding Columns}" SelectedItem="{Binding SelectedColumnToChange}" Grid.Column="1" Grid.Row="3"></ComboBox>
+        <TextBox Name ="ChangeColumn" Text="{Binding ChangeColumn}" Grid.Column="1" Grid.Row="4"/>
+        <TextBox Name ="AddColumn" Text="{Binding AddColumn}" Grid.Column="1" Grid.Row="5"/>
+        <ComboBox Name="TypeColumn" ItemsSource="{Binding ColumnsTypes}" SelectedItem="{Binding ColumnType}" Grid.Column="1" Grid.Row="6"></ComboBox>
+        <ComboBox Name="DeleteColumn" ItemsSource="{Binding Columns}" SelectedItem="{Binding SelectedColumnToDelete}"  Grid.Column="1" Grid.Row="7"></ComboBox>
+
+        <Button Command="{Binding SaveChangeNameTable}"  Grid.Column="2" Grid.Row="2" Background="DarkGreen" Foreground="White" >Save</Button>
+        <Button Command="{Binding SaveNameColumn}" Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" Background="DarkGreen" Foreground="White">Save</Button>
+        <Button Command="{Binding SaveAddColumn}"  Grid.Column="2" Grid.Row="5" Grid.RowSpan="2" Background="DarkGreen" Foreground="White">Save</Button>
+        <Button Command="{Binding SaveDeleteColumn}" Grid.Column="2" Grid.Row="7" Background="DarkGreen" Foreground="White">Save</Button>
+
+
+        <Button Command="{Binding SaveAddRow}" Grid.Column="5" Grid.Row="2" Grid.ColumnSpan="2" Background="DarkGreen" Foreground="White">Save</Button>
+        <Button Command="{Binding SaveDeleteRow}" Grid.Column="6" Grid.Row="3" Background="DarkGreen" Foreground="White">Save</Button>
+        <ComboBox Name="DeleteRow" ItemsSource="{Binding Rows}" SelectedItem="{Binding SelectedRowToDelete}" Grid.Row="3" Grid.Column="5"></ComboBox>
+        <Button Command="{Binding SaveChangeTable}" Grid.Row="4" Grid.Column="5" Grid.ColumnSpan="2" Background="DarkGreen" Foreground="White">Save the edited row</Button>
         
-        
-        <Button Click="SaveAddRow"  Grid.Column="5" Grid.Row="2" Grid.ColumnSpan="2" Background="DarkGreen" Foreground="White">Save</Button>
-        <Button Click="SaveDeleteRow"  Grid.Column="6" Grid.Row="3" Background="DarkGreen" Foreground="White">Save</Button>
-        <ComboBox Name="DeleteRow" Grid.Row="3" Grid.Column="5"></ComboBox>
-        <Button Click="SaveChangeTable" Grid.Row="4" Grid.Column="5" Grid.ColumnSpan="2" Background="DarkGreen" Foreground="White">Save the edited row</Button>
-        
-        <DataGrid Grid.ColumnSpan="7" Name="DataTable2" AutoGenerateColumns="False" Background="White" Foreground="DarkGreen"/>
+        <DataGrid Grid.ColumnSpan="7" Name="DataTable2" ItemsSource="{Binding DataTable}" AutoGenerateColumns="True" Background="White" Foreground="DarkGreen"/>
         
     </Grid>
 </Window>

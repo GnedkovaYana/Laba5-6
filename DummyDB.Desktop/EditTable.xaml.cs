@@ -13,9 +13,10 @@ namespace DummyDB.Desktop
         public EditTable(Table table)
         {
             InitializeComponent();
+            DataContext = new EditTableViewModel(table);
             this.table = table;
             LoadTable();
-            LoadComboBox();
+           // LoadComboBox();
         }
         private Dictionary<TableScheme, Table> schemesTables = new Dictionary<TableScheme, Table>();
         Column primaryColumn = null;
