@@ -17,15 +17,17 @@ namespace DummyDB.Desktop
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainWindowViewModel();
         }
         List<Table> tables = new List<Table>();
+        string folderPath = "";
 
         private void OpenFile(object sender, RoutedEventArgs e)
         {
             tables = new List<Table>();
             dataTree.Items.Clear();
             FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
-            string folderPath = "";
+            
 
             if (openFolderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -137,8 +139,9 @@ namespace DummyDB.Desktop
 
         private void CreateTable(object sender, RoutedEventArgs e)
         {
-            CreateTable createTable = new CreateTable();
+            CreateTable createTable = new CreateTable(folderPath);
             createTable.Show();
+
         }
 
         private void EditTable(object sender, RoutedEventArgs e)

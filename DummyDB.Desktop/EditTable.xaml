@@ -60,7 +60,7 @@
         <ComboBox Name="DeleteRow" ItemsSource="{Binding Rows}" SelectedItem="{Binding SelectedRowToDelete}" Grid.Row="3" Grid.Column="5"></ComboBox>
         <Button Command="{Binding SaveChangeTable}" Grid.Row="4" Grid.Column="5" Grid.ColumnSpan="2" Background="DarkGreen" Foreground="White">Save the edited row</Button>
 
-        <DataGrid Name="DataTable2" ItemsSource="{Binding DataTable}" AutoGenerateColumns="True" Grid.ColumnSpan="7"  Background="White" Foreground="DarkGreen"/>
+        <DataGrid Name="DataTable2" ItemsSource="{Binding DataTable}" CanUserAddRows = "False" AutoGenerateColumns="True" Grid.ColumnSpan="7"  Background="White" Foreground="DarkGreen"/>
         
     </Grid>
 </Window>

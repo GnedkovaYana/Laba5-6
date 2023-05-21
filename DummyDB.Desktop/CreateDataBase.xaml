@@ -21,10 +21,10 @@
             <ColumnDefinition Width="105" />
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Column="1" Grid.ColumnSpan="2" Foreground="DarkGreen" > Введите название базы данных:</TextBlock>
-        <TextBox Name ="nameDB" Grid.Column="3" Grid.ColumnSpan="2"/>
-        <Button Click="ChooseSave" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="5" Grid.Row="1" BorderBrush="DarkGreen" Background="DarkGreen" Foreground="White">Выберете место для хранения вашей базы данных</Button>
+        <TextBox Name ="nameDB" Text="{Binding NameDB}" Grid.Column="3" Grid.ColumnSpan="2"/>
+        <Button Command="{Binding ChooseSave}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="5" Grid.Row="1" BorderBrush="DarkGreen" Background="DarkGreen" Foreground="White">Выберете место для хранения вашей базы данных</Button>
         <TextBlock Grid.Row="2" Grid.Column="1"  Foreground="DarkGreen">Вы выбрали:</TextBlock>
-        <TextBox x:Name="folder" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3" Height="20" Width="310" HorizontalAlignment="Right"  VerticalAlignment="Top"></TextBox>
-        <Button Click="OK" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="4"  Grid.Row="3" Width="65" Height="20" BorderBrush="DarkGreen" Background="DarkGreen" Foreground="White">Сохранить</Button>
+        <TextBox x:Name="folder" Text="{Binding Folder}" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3" Height="20" Width="310" HorizontalAlignment="Right"  VerticalAlignment="Top"></TextBox>
+        <Button Command="{Binding OK}" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="4"  Grid.Row="3" Width="65" Height="20" BorderBrush="DarkGreen" Background="DarkGreen" Foreground="White">Сохранить</Button>
     </Grid>
 </Window>

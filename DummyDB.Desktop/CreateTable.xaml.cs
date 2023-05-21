@@ -7,56 +7,11 @@ namespace DummyDB.Desktop
 {
     public partial class CreateTable : Window
     {
-        TableScheme scheme;
-        bool IsAddPrimary = false;
-        public CreateTable()
+        public CreateTable(string folderPath)
         {
             InitializeComponent();
-            scheme = new TableScheme();
-            scheme.Columns = new List<Column>();
-        }
+            DataContext = new CreateTableViewModel(folderPath);
 
-        private void SaveTable(object sender, RoutedEventArgs e)
-        {
-            if (!(IsAddPrimary))
-            {
-                MessageBox.Show("Вы не добавили Primary");
-            }
-            else 
-            {
-                if (!string.IsNullOrEmpty(nameTable.Text) && !string.IsNullOrEmpty(nameColumn.Text) && !string.IsNullOrEmpty(nameType.Text))
-                {
-
-                    scheme.Name = nameTable.Text;
-                    string jsonScheme = JsonSerializer.Serialize<TableScheme>(scheme);
-
-                    string folderPath = folderPathTextBox.Text;
-                    Table table = new Table(scheme, folderPath);
-                    table.Save();
-
-                    MessageBox.Show("Файл создан!");
-                }
-            }
-        }
-
-        private void AddColumn(object sender, RoutedEventArgs e)
-        {
-            if ((bool)Primary.IsChecked)
-            {
-                if (IsAddPrimary)
-                {
-                    MessageBox.Show("Вы уже да");
-                }
-                else
-                {
-                    scheme.Columns.Add(new Column { Name = nameColumn.Text, Type = nameType.Text, IsPrimary = true });
-                    IsAddPrimary = true;
-                }
-            }
-            else
-            {
-                scheme.Columns.Add(new Column { Name = nameColumn.Text, Type = nameType.Text, IsPrimary = false});
-            }
         }
     }
 }

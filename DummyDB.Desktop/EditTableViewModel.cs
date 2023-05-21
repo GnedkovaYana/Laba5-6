@@ -1,6 +1,7 @@
 ﻿using Laba5;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
@@ -54,12 +55,12 @@ namespace DummyDB.Desktop
             }
         }
 
-        public List<Column> Columns { get; set; }
+        public ObservableCollection<Column> Columns { get; set; }
         public Column SelectedColumnToChange { get; set; }
         public List<string> ColumnsTypes { get; set; }
         public string ColumnType { get; set; }
         public Column SelectedColumnToDelete { get; set; }
-        public List<Row> Rows { get; set; }
+        public ObservableCollection<Row> Rows { get; set; }
         public Row SelectedRowToDelete { get; set; }
 
         Table table;
@@ -74,7 +75,7 @@ namespace DummyDB.Desktop
         public EditTableViewModel(Table table) 
         {
             this.table = table;
-            Columns = table.Scheme.Columns;
+            Columns = new ObservableCollection<Column>(table.Scheme.Columns);
             ColumnsTypes = new List<string>
             {
                 "uint",
@@ -82,7 +83,7 @@ namespace DummyDB.Desktop
                 "dataTime",
                 "double"
             };
-            Rows = table.Rows;
+            Rows = new ObservableCollection<Row>(table.Rows);
             LoadTable();
         }
 
@@ -144,17 +145,72 @@ namespace DummyDB.Desktop
 
         public ICommand SaveAddRow => new CommandDelegate(param =>
         {
-
+            table.AddRow();
+            MessageBox.Show("Строка добалена");
+            UpdateView();
         });
 
         public ICommand SaveDeleteRow => new CommandDelegate(param =>
         {
-
+            if (SelectedRowToDelete == null)
+            {
+                MessageBox.Show("Вы не выбрали строку");
+            }
+            else
+            {
+                table.DeleteRow(SelectedRowToDelete.ToString());
+                MessageBox.Show("Строка удалена");
+                UpdateView();
+            }
         });
 
         public ICommand SaveChangeTable => new CommandDelegate(param =>
         {
+            for (int i = 0; i < DataTable.Rows.Count; i++)
+            {
+                for (int j = 0; j < DataTable.Columns.Count; j++)
+                {
+                    if (table.Scheme.Columns[j].Type == "uint")
+                    {
+                        if (uint.TryParse(DataTable.Rows[i][DataTable.Columns[j]].ToString(), out uint number))
+                        {
+                            table.Rows[i].Data[table.Scheme.Columns[j]] = number;
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Ошибка: в строке {i + 1} в столбце {table.Scheme.Columns[j].Name} неверный тип данных");
+                        }
 
+                    }
+                    else if (table.Scheme.Columns[j].Type == "double")
+                    {
+                        if (double.TryParse(DataTable.Rows[i][DataTable.Columns[j]].ToString(), out double doubleNumber))
+                        {
+                            table.Rows[i].Data[table.Scheme.Columns[j]] = doubleNumber;
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Ошибка: в строке {i + 1} в столбце {table.Scheme.Columns[j].Name} неверный тип данных");
+                        }
+                    }
+                    else if (table.Scheme.Columns[j].Type == "datatime")
+                    {
+                        if (DateTime.TryParse(DataTable.Rows[i][DataTable.Columns[j]].ToString(), out DateTime datetimeNamber))
+                        {
+                            table.Rows[i].Data[table.Scheme.Columns[j]] = datetimeNamber;
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Ошибка: в строке {i + 1} в столбце {table.Scheme.Columns[j].Name} неверный тип данных");
+                        }
+                    }
+                    else
+                    {
+                        table.Rows[i].Data[table.Scheme.Columns[j]] = DataTable.Rows[i][DataTable.Columns[j]].ToString();
+                    }
+                }
+            }
+            table.Save();
         });
 
 
@@ -186,16 +242,18 @@ namespace DummyDB.Desktop
         public void UpdateView()
         {
             UpdateColumns();
-
-            List<Row> newRows = new List<Row>();
-            foreach (Row row in table.Rows)
-            {
-                newRows.Add(row);
-            }
-            Rows = newRows;
+            UpdateRows();
             LoadTable();
         }
 
+        private void UpdateRows()
+        {
+            Rows.Clear();
+            foreach (Row row in table.Rows)
+            {
+                Rows.Add(row);
+            }
+        }
         private void UpdateColumns()
         {
             Columns.Clear();

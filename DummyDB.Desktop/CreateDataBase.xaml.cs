@@ -12,6 +12,7 @@ namespace DummyDB.Desktop
         public CreateDataBase()
         {
             InitializeComponent();
+            DataContext = new CreateDataBaseViewModel();
         }
 
         private void OK(object sender, RoutedEventArgs e)
