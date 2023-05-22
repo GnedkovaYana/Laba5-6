@@ -108,9 +108,17 @@ namespace DummyDB.Desktop
             }
             else
             {
-                table.UpdateColumnName(ChangeColumn, SelectedColumnToChange.Name);
-                MessageBox.Show("Столбец переименован");
-                UpdateView();
+                try
+                {
+                    table.UpdateColumnName(ChangeColumn, SelectedColumnToChange.Name);
+                    MessageBox.Show("Столбец переименован");
+                    UpdateView();
+                }
+                catch (Exception ex) 
+                {
+                    MessageBox.Show(ex.Message);
+                }
+               
             }
         });
 
@@ -122,9 +130,17 @@ namespace DummyDB.Desktop
             }
             else
             {
-                table.AddColumn(AddColumn, ColumnType, false );
-                MessageBox.Show("Столбец добален");
-                UpdateView();
+                try
+                {
+                    table.AddColumn(AddColumn, ColumnType, false);
+                    MessageBox.Show("Столбец добален");
+                    UpdateView();
+                }
+                catch (Exception ex) 
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
             }
 
         });
@@ -137,9 +153,16 @@ namespace DummyDB.Desktop
             }
             else
             {
-                table.RemoveColumn(SelectedColumnToDelete.Name);
-                MessageBox.Show("Столбец удален");
-                UpdateView();
+                try
+                {
+                    table.RemoveColumn(SelectedColumnToDelete.Name);
+                    MessageBox.Show("Столбец удален");
+                    UpdateView();
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         });
 
@@ -211,6 +234,7 @@ namespace DummyDB.Desktop
                 }
             }
             table.Save();
+            MessageBox.Show("Строка отредактирована");
         });
 
 

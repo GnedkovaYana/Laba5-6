@@ -64,6 +64,11 @@ namespace Laba5
 
         public void UpdateColumnName(string  newColumnName,  string oldColumnName) 
         {
+
+            if (GetColumnByName(newColumnName) != null)
+            {
+                throw new ArgumentException("Такой столбец уже существует");
+            }
             Column CurretColumn = null;
             CurretColumn = GetColumnByName(oldColumnName);
             CurretColumn.Name = newColumnName;
@@ -72,6 +77,11 @@ namespace Laba5
 
         public void AddColumn(string columnName, string typeColumn, bool primaryColumn)
         {
+            if (GetColumnByName(columnName) != null)
+            {
+                throw new ArgumentException("Такой столбец уже существует");
+            }
+
             Column column = new Column { Name = columnName, Type = typeColumn, IsPrimary = primaryColumn };
             Scheme.Columns.Add(column);
             foreach (Row row in Rows)

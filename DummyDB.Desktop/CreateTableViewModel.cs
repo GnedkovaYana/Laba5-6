@@ -96,7 +96,7 @@ namespace DummyDB.Desktop
             }
             else
             {
-                if (!string.IsNullOrEmpty(NameTable) && !string.IsNullOrEmpty(NameColumn) && !string.IsNullOrEmpty(SelectedType))
+                if (!string.IsNullOrEmpty(NameTable))
                 {
                     Directory.CreateDirectory(folderPath + "\\" + NameTable);
                     scheme.Name = NameTable;
@@ -111,6 +111,11 @@ namespace DummyDB.Desktop
 
         public ICommand AddColumn => new CommandDelegate(param =>
         {
+            if (string.IsNullOrEmpty(NameColumn) && string.IsNullOrEmpty(SelectedType))
+            {
+                MessageBox.Show("Вы не выбрали имя столбца или его тип");
+                return;
+            }
             if ((bool)Primary)
             {
                 if (IsAddPrimary)

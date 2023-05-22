@@ -7,9 +7,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -28,28 +26,31 @@ namespace DummyDB.Desktop
         List<Table> tables = new List<Table>();
         string folderPath = "";
 
-        private ObservableCollection<TableScheme> schemes;
+        private ObservableCollection<TableScheme> schemes = new ObservableCollection<TableScheme>();
         public ObservableCollection<TableScheme> Schemes
         {
             get { return schemes; }
             set { schemes = value; OnPropertyChanged(); }
         }
 
-        public ObservableCollection<Table> Tables { get; set; }
+        public ObservableCollection<Table> Tables { get; set; } = new ObservableCollection<Table>();
 
         public TableScheme SelectedScheme { get; set; }
 
-        public DataTable DataTable { get; set; }
+        private DataTable dataTable;
+        public DataTable DataTable
+        {
+            get { return dataTable; }
+            set { dataTable = value; OnPropertyChanged(); }
+        }
 
         public Table SelectedTable { get; set; }
-
 
 
         public ICommand OpenFile => new CommandDelegate(param =>
         {
             tables = new List<Table>();
             FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
-
 
             if (openFolderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -59,33 +60,6 @@ namespace DummyDB.Desktop
                 Schemes = new ObservableCollection<TableScheme>(tables.Select(table => table.Scheme).ToArray());
             }
         });
-
-        private void ReadTables()
-        {
-            tables.Clear();
-            foreach (string filePath in Directory.EnumerateDirectories(folderPath))
-            {
-                TableScheme tableScheme = null;
-                string csvData = null;
-
-                foreach (string file in Directory.EnumerateFiles(filePath))
-                {
-                    if (file.Contains("json"))
-                    {
-                        string jsonScheme = File.ReadAllText(file);
-                        tableScheme = JsonSerializer.Deserialize<TableScheme>(jsonScheme);
-                    }
-
-                    if (file.Contains("csv"))
-                    {
-                        csvData = file;
-                    }
-                }
-
-                Table table = ReadTable.TableRead(tableScheme, filePath);
-                tables.Add(table);
-            }
-        }
 
         public ICommand CreateFile => new CommandDelegate(param =>
         {
@@ -124,9 +98,8 @@ namespace DummyDB.Desktop
 
         public ICommand SelectTable => new CommandDelegate(param =>
         {
-            Table table = SelectedTable;
-            LoadTable();
-        
+            table = SelectedTable;
+            UpdateView();
         });
 
         private void windowClosed(object sender, EventArgs e)
@@ -140,6 +113,33 @@ namespace DummyDB.Desktop
             LoadTreeView();
             LoadTable();
             UpdateTables();
+        }
+
+        private void ReadTables()
+        {
+            tables.Clear();
+            foreach (string filePath in Directory.EnumerateDirectories(folderPath))
+            {
+                TableScheme tableScheme = null;
+                string csvData = null;
+
+                foreach (string file in Directory.EnumerateFiles(filePath))
+                {
+                    if (file.Contains("json"))
+                    {
+                        string jsonScheme = File.ReadAllText(file);
+                        tableScheme = JsonSerializer.Deserialize<TableScheme>(jsonScheme);
+                    }
+
+                    if (file.Contains("csv"))
+                    {
+                        csvData = file;
+                    }
+                }
+
+                Table table = ReadTable.TableRead(tableScheme, filePath);
+                tables.Add(table);
+            }
         }
 
         private void LoadTable()
@@ -172,10 +172,6 @@ namespace DummyDB.Desktop
 
         private void LoadTreeView()
         {
-            if (Schemes == null)
-            {
-                Schemes = new ObservableCollection<TableScheme> { };
-            }
             Schemes.Clear();
             foreach (var table in tables)
             {
@@ -185,10 +181,6 @@ namespace DummyDB.Desktop
 
         public void UpdateTables()
         {
-            if (Tables == null)
-            {
-                Tables = new ObservableCollection<Table> { };
-            }
             Tables.Clear();
             foreach (var table in tables)
             {
