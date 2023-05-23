@@ -24,12 +24,13 @@
 
         <TextBlock Grid.Column="1" Foreground="DarkGreen"> Введите название таблицы:</TextBlock>
         <TextBlock Grid.Column="1" Grid.Row="1" Foreground="DarkGreen"> Введите название столбца:</TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="1" Foreground="DarkGreen"> Выберете тип данных:</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="1" Foreground="DarkGreen"> Выберите тип данных:</TextBlock>
         <TextBox Name ="nameColumn" Text="{Binding NameColumn}" Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" />
         <TextBox Name ="nameTable" Text="{Binding NameTable}" Grid.Column="2" Grid.ColumnSpan="2" />
+        <TextBlock Grid.Row="2" Grid.Column="1" Foreground="DarkGreen" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="260" Grid.ColumnSpan="2" Grid.RowSpan="2">Отметьте главный столбец:</TextBlock>
         <ComboBox Name="nameType" ItemsSource="{Binding NameType}" SelectedItem="{Binding SelectedType}" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2"></ComboBox>
-        <Button Command="{Binding SaveTable}" Grid.Row="4" Grid.ColumnSpan="3" Width="300" Height="25" VerticalAlignment="Bottom" Foreground="White" Background="DarkGreen">Сохранить таблицу</Button>
-        <Button Command="{Binding AddColumn}" Grid.Row="3" Grid.ColumnSpan="3" Width="300" Height="25" VerticalAlignment="Bottom" Foreground="White" Background="DarkGreen" >Добавить столбец</Button>
-        <CheckBox x:Name="Primary" IsChecked="{Binding Primary}"  Grid.Row="3" Grid.Column="3" VerticalAlignment="Bottom" Foreground="DarkGreen">IsPrimary</CheckBox>
+        <Button Command="{Binding SaveTable}" Grid.Row="5" Grid.ColumnSpan="4" Width="300" Height="25" VerticalAlignment="Bottom" Foreground="White" Background="DarkGreen">Сохранить таблицу</Button>
+        <Button Command="{Binding AddColumn}" Grid.Row="4" Grid.ColumnSpan="4" Width="300" Height="25" VerticalAlignment="Bottom" Foreground="White" Background="DarkGreen" >Добавить столбец</Button>
+        <CheckBox x:Name="Primary" IsChecked="{Binding Primary}"  Grid.Row="3" Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="DarkGreen" Width="80">IsPrimary</CheckBox>
     </Grid>
 </Window>

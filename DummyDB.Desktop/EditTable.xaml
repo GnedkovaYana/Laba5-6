@@ -33,13 +33,13 @@
         <TextBox Grid.Row ="1" Grid.ColumnSpan="4" Grid.Column="3" Background="White"></TextBox>
         <TextBlock Grid.Row ="1" Grid.Column="3" Grid.ColumnSpan="4" Foreground="DarkGreen" HorizontalAlignment="Center">Редактирование данных</TextBlock>
         <TextBlock Grid.Row ="2" Foreground="DarkGreen">Переименовать таблицу</TextBlock>
-        <TextBlock Grid.Row ="3" Foreground="DarkGreen">Выберете столбец, <LineBreak/>который хотите изменить</TextBlock>
+        <TextBlock Grid.Row ="3" Foreground="DarkGreen">Выберите столбец, <LineBreak/>который хотите изменить</TextBlock>
         <TextBlock Grid.Row ="4" Foreground="DarkGreen">Переименовать столбец</TextBlock>
         <TextBlock Grid.Row ="5" Foreground="DarkGreen">Добавить столбец</TextBlock>
-        <TextBlock Grid.Row ="6" Foreground="DarkGreen">Выберете тип для нового  <LineBreak/> столбца</TextBlock>
+        <TextBlock Grid.Row ="6" Foreground="DarkGreen">Выберите тип для нового  <LineBreak/> столбца</TextBlock>
         <TextBlock Grid.Row ="7" Foreground="DarkGreen">Удалить столбец</TextBlock>
         <TextBlock Grid.Row ="2" Grid.Column="4" Foreground="DarkGreen">Добавить строку</TextBlock>
-        <TextBlock Grid.Row ="3" Grid.Column="4" Foreground="DarkGreen">Выберете строку, которую <LineBreak/>хотите удалить</TextBlock>
+        <TextBlock Grid.Row ="3" Grid.Column="4" Foreground="DarkGreen">Выберите строку, которую <LineBreak/>хотите удалить</TextBlock>
         <TextBlock Grid.Row ="4" Grid.Column="4" Foreground="DarkGreen">Редактирование <LineBreak/> осуществляется в таблице</TextBlock>
 
         <TextBox Name ="ChangeTable" Text="{Binding ChangeTable}" Grid.Column="1" Grid.Row="2"/>
