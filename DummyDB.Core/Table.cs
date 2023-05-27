@@ -167,7 +167,6 @@ namespace Laba5
                     return column;
                 }
             }
-
             return null;
         }
 
@@ -179,7 +178,6 @@ namespace Laba5
                 {
                     return row;
                 }
-
             }
             return null;
         }

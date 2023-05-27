@@ -18,6 +18,7 @@ namespace Laba5
             return Name;
         }
 
+        [JsonIgnore]
         public string TreeViewString => Name + " - " + Type;
     }
 }

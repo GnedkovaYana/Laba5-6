@@ -39,7 +39,6 @@ namespace DummyDB.Desktop
                 "dataTime",
                 "double"
             };
-
         }
 
         private string nameColumn;
@@ -100,10 +99,8 @@ namespace DummyDB.Desktop
                 {
                     Directory.CreateDirectory(folderPath + "\\" + NameTable);
                     scheme.Name = NameTable;
-                    string jsonScheme = JsonSerializer.Serialize<TableScheme>(scheme);
                     Table table = new Table(scheme, folderPath + "\\" + NameTable);
                     table.Save();
-
                     MessageBox.Show("Файл создан!");
                 }
             }
