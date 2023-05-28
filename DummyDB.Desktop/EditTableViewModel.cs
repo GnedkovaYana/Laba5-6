@@ -65,7 +65,7 @@ namespace DummyDB.Desktop
 
         Table table;
 
-        private DataTable dataTable;
+        private DataTable dataTable = new DataTable();
         public DataTable DataTable
         {
             get { return dataTable; }
@@ -193,7 +193,18 @@ namespace DummyDB.Desktop
             {
                 for (int j = 0; j < DataTable.Columns.Count; j++)
                 {
-                    if (table.Scheme.Columns[j].Type == "uint")
+                    ValidateItem(i, j);
+                }
+            }
+            table.Save();
+            MessageBox.Show("Строка отредактирована");
+        });
+
+        private void ValidateItem(int i, int j)
+        {
+            switch (table.Scheme.Columns[j].Type)
+            {
+                case ("uint"):
                     {
                         if (uint.TryParse(DataTable.Rows[i][DataTable.Columns[j]].ToString(), out uint number))
                         {
@@ -203,9 +214,10 @@ namespace DummyDB.Desktop
                         {
                             MessageBox.Show($"Ошибка: в строке {i + 1} в столбце {table.Scheme.Columns[j].Name} неверный тип данных");
                         }
-
                     }
-                    else if (table.Scheme.Columns[j].Type == "double")
+                    break;
+
+                case ("double"):
                     {
                         if (double.TryParse(DataTable.Rows[i][DataTable.Columns[j]].ToString(), out double doubleNumber))
                         {
@@ -216,7 +228,9 @@ namespace DummyDB.Desktop
                             MessageBox.Show($"Ошибка: в строке {i + 1} в столбце {table.Scheme.Columns[j].Name} неверный тип данных");
                         }
                     }
-                    else if (table.Scheme.Columns[j].Type == "datatime")
+                    break;
+
+                case ("datatime"):
                     {
                         if (DateTime.TryParse(DataTable.Rows[i][DataTable.Columns[j]].ToString(), out DateTime datetimeNamber))
                         {
@@ -227,24 +241,15 @@ namespace DummyDB.Desktop
                             MessageBox.Show($"Ошибка: в строке {i + 1} в столбце {table.Scheme.Columns[j].Name} неверный тип данных");
                         }
                     }
-                    else
-                    {
-                        table.Rows[i].Data[table.Scheme.Columns[j]] = DataTable.Rows[i][DataTable.Columns[j]].ToString();
-                    }
-                }
+                    break;
+                default:
+                    table.Rows[i].Data[table.Scheme.Columns[j]] = DataTable.Rows[i][DataTable.Columns[j]].ToString();
+                    break;
             }
-            table.Save();
-            MessageBox.Show("Строка отредактирована");
-        });
-
+        }
 
         public void LoadTable()
         {
-            if (DataTable != null)
-            {
-                DataTable.Clear();
-            }
-
             DataTable dataTable = new DataTable();
             dataTable.TableName = table.Scheme.Name;
             foreach (var column in table.Scheme.Columns)

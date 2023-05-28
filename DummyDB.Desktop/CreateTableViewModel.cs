@@ -93,16 +93,17 @@ namespace DummyDB.Desktop
             {
                 MessageBox.Show("Вы не добавили Primary");
             }
+            else if (string.IsNullOrEmpty(NameTable))
+            {
+                MessageBox.Show("Вы не ввели название таблицы!");
+            }
             else
             {
-                if (!string.IsNullOrEmpty(NameTable))
-                {
-                    Directory.CreateDirectory(folderPath + "\\" + NameTable);
-                    scheme.Name = NameTable;
-                    Table table = new Table(scheme, folderPath + "\\" + NameTable);
-                    table.Save();
-                    MessageBox.Show("Файл создан!");
-                }
+                Directory.CreateDirectory(folderPath + "\\" + NameTable);
+                scheme.Name = NameTable;
+                Table table = new Table(scheme, folderPath + "\\" + NameTable);
+                table.Save();
+                MessageBox.Show("Файл создан!");
             }
         });
 
@@ -113,27 +114,17 @@ namespace DummyDB.Desktop
                 MessageBox.Show("Вы не выбрали имя столбца или его тип");
                 return;
             }
-            if ((bool)Primary)
+
+            if (IsAddPrimary && Primary)
             {
-                if (IsAddPrimary)
-                {
-                    MessageBox.Show("Вы уже создали primary столбец");
-                }
-                else
-                {
-                    scheme.Columns.Add(new Column { Name = NameColumn, Type = SelectedType, IsPrimary = true });
-                    IsAddPrimary = true;
-                    NameColumn = "";
-                    Primary = false;
-                    MessageBox.Show("Столбец добавлен");
-                }
+                MessageBox.Show("Вы уже создали Primary столбец");
             }
             else
             {
-                scheme.Columns.Add(new Column { Name = NameColumn, Type = SelectedType, IsPrimary = false });
+                scheme.Columns.Add(new Column { Name = NameColumn, Type = SelectedType, IsPrimary = (bool)Primary });
+                IsAddPrimary = Primary || IsAddPrimary;
                 NameColumn = "";
                 Primary = false;
-                MessageBox.Show("Столбец добавлен");
             }
         });
     }

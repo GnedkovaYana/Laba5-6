@@ -144,30 +144,24 @@ namespace DummyDB.Desktop
 
         private void LoadTable()
         {
-            if (DataTable != null)
+            if (table == null)
+                return;
+            DataTable dataTable = new DataTable();
+            dataTable.TableName = table.Scheme.Name;
+            foreach (var column in table.Scheme.Columns)
             {
-                DataTable.Clear();
+                dataTable.Columns.Add(column.Name);
             }
-
-            if (table != null)
+            foreach (var row in table.Rows)
             {
-                DataTable dataTable = new DataTable();
-                dataTable.TableName = table.Scheme.Name;
-                foreach (var column in table.Scheme.Columns)
+                DataRow dataRow = dataTable.NewRow();
+                foreach (var item in row.Data)
                 {
-                    dataTable.Columns.Add(column.Name);
+                    dataRow[item.Key.Name] = item.Value.ToString();
                 }
-                foreach (var row in table.Rows)
-                {
-                    DataRow dataRow = dataTable.NewRow();
-                    foreach (var item in row.Data)
-                    {
-                        dataRow[item.Key.Name] = item.Value.ToString();
-                    }
-                    dataTable.Rows.Add(dataRow);
-                }
-                DataTable = dataTable;
+                dataTable.Rows.Add(dataRow);
             }
+            DataTable = dataTable;
         }
 
         private void LoadTreeView()
