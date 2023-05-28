@@ -118,7 +118,6 @@ namespace DummyDB.Desktop
                 {
                     MessageBox.Show(ex.Message);
                 }
-               
             }
         });
 
@@ -140,9 +139,7 @@ namespace DummyDB.Desktop
                 {
                     MessageBox.Show(ex.Message);
                 }
-
             }
-
         });
 
         public ICommand SaveDeleteColumn => new CommandDelegate(param =>
@@ -242,6 +239,7 @@ namespace DummyDB.Desktop
                         }
                     }
                     break;
+
                 default:
                     table.Rows[i].Data[table.Scheme.Columns[j]] = DataTable.Rows[i][DataTable.Columns[j]].ToString();
                     break;
@@ -252,10 +250,21 @@ namespace DummyDB.Desktop
         {
             DataTable dataTable = new DataTable();
             dataTable.TableName = table.Scheme.Name;
+            AddColumns(dataTable);
+            AddRows(dataTable);
+            DataTable = dataTable;
+        }
+
+        private void AddColumns(DataTable dataTable)
+        {
             foreach (var column in table.Scheme.Columns)
             {
                 dataTable.Columns.Add(column.Name);
             }
+        }
+
+        private void AddRows(DataTable dataTable)
+        {
             foreach (var row in table.Rows)
             {
                 DataRow dataRow = dataTable.NewRow();
@@ -265,7 +274,6 @@ namespace DummyDB.Desktop
                 }
                 dataTable.Rows.Add(dataRow);
             }
-            DataTable = dataTable;
         }
 
         public void UpdateView()

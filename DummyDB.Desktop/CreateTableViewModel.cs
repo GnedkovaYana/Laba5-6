@@ -114,7 +114,6 @@ namespace DummyDB.Desktop
                 MessageBox.Show("Вы не выбрали имя столбца или его тип");
                 return;
             }
-
             if (IsAddPrimary && Primary)
             {
                 MessageBox.Show("Вы уже создали Primary столбец");

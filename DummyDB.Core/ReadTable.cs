@@ -25,7 +25,6 @@ namespace Laba5
         public static Row RowRead(TableScheme tableScheme, string path, int i, string[] el)
         {
             Row row = new Row();
-
             for (int j = 0; j < el.Length; j++)
             {
                 switch (tableScheme.Columns[j].Type)

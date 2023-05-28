@@ -136,7 +136,6 @@ namespace DummyDB.Desktop
                         csvData = file;
                     }
                 }
-
                 Table table = ReadTable.TableRead(tableScheme, filePath);
                 tables.Add(table);
             }
@@ -146,6 +145,7 @@ namespace DummyDB.Desktop
         {
             if (table == null)
                 return;
+
             DataTable dataTable = new DataTable();
             dataTable.TableName = table.Scheme.Name;
             foreach (var column in table.Scheme.Columns)

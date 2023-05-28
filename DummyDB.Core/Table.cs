@@ -36,7 +36,6 @@ namespace Laba5
                 }
                 sb.Append("\n");
             }
-
             return sb.ToString().Trim('\n');
         }
 
@@ -53,7 +52,6 @@ namespace Laba5
             string jsonScheme = JsonSerializer.Serialize<TableScheme>(Scheme, options);
             File.WriteAllText(FilePath + "//" + Scheme.Name + ".json", jsonScheme);
             File.WriteAllText(FilePath + "//" + Scheme.Name + ".csv", GetCsv());
-
         }
 
         public void UpdateTableName(string tableName)
@@ -64,7 +62,6 @@ namespace Laba5
 
         public void UpdateColumnName(string  newColumnName,  string oldColumnName) 
         {
-
             if (GetColumnByName(newColumnName) != null)
             {
                 throw new ArgumentException("Такой столбец уже существует");
